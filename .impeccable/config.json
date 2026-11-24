@@ -1,0 +1,14 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "arial",
+        "createdAt": "2026-11-24T18:52:43.225Z",
+        "reason": "Claude: Arial is only used by the accessibility toolbar's 'readable font' mode (html.a11y-readable), where a plain system face is the point; the site's own type is Fredoka + Rubik"
+      }
+    ]
+  }
+}
