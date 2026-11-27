@@ -469,11 +469,11 @@ export default function FloatingAccessibility() {
                 <RotateCcw aria-hidden="true" className="size-4" />
                 איפוס הגדרות
               </button>
-              <a href="#/accessibility" onClick={() => setOpen(false)} className="inline-flex min-h-9 items-center gap-1 rounded-full px-2 font-medium text-white/90 transition-colors hover:text-white hover:underline">
+              <a href="/accessibility" onClick={() => setOpen(false)} className="inline-flex min-h-9 items-center gap-1 rounded-full px-2 font-medium text-white/90 transition-colors hover:text-white hover:underline">
                 <FileText aria-hidden="true" className="size-4" />
                 הצהרת נגישות
               </a>
-              <a href="#/accessibility" onClick={() => setOpen(false)} className="inline-flex min-h-9 items-center gap-1 rounded-full px-2 font-medium text-white/90 transition-colors hover:text-white hover:underline">
+              <a href="/accessibility" onClick={() => setOpen(false)} className="inline-flex min-h-9 items-center gap-1 rounded-full px-2 font-medium text-white/90 transition-colors hover:text-white hover:underline">
                 <Mail aria-hidden="true" className="size-4" />
                 דיווח על בעיית נגישות
               </a>

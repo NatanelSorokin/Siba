@@ -1,25 +1,23 @@
-import { Heart, PhoneCall, Search, ShoppingCart, X } from 'lucide-react';
-import { type FocusEvent, type PointerEvent, type Ref, useEffect, useRef, useState } from 'react';
+import { Search, X } from 'lucide-react';
+import { type FocusEvent, type MouseEvent, type PointerEvent, type Ref, useEffect, useRef, useState } from 'react';
+import { categoryHref } from '../catalog';
+import { navigate } from '../useRoute';
+import { glideToTop } from '../useSmoothScroll';
+import { useCart } from '../cart';
+import { useContent } from '../content/store';
 import Logo from './Logo';
+import CartIcon from './CartIcon';
 
-const categories = [
-  'בלונים',
-  'יום הולדת לפי נושא',
-  'מוצרי מסיבה',
-  'אביזרי אפייה',
-  'חומרי גלם לאפייה',
-  'קישוטים לעוגה',
-  'כלים חד פעמיים',
-  'כלים מתכלים',
-  'ממתקים',
-];
-
-const iconButton =
-  'relative inline-flex size-12 items-center justify-center rounded-full text-ink-700 transition-[background-color,color,transform] duration-200 hover:bg-brand-50 hover:text-brand-700 active:scale-95';
+// Header controls share the search field's height and outline, so search, logo and cart read as one row.
+const control =
+  'relative inline-flex h-12 items-center justify-center rounded-full border border-ink-200 bg-white text-ink-900 transition-[height,background-color,border-color,color,transform] duration-200 hover:border-brand-300 hover:bg-brand-50 hover:text-brand-700 active:scale-95';
+const iconButton = `${control} w-12`;
 
 function SearchField({ id, inputRef }: { id: string; inputRef?: Ref<HTMLInputElement> }) {
   return (
-    <form role="search" className="relative w-full">
+    // Search results aren't built yet. Submitting must not put the typed words into the
+    // address, where they would end up in server logs and browser history.
+    <form role="search" className="relative w-full" onSubmit={(e) => e.preventDefault()}>
       <label htmlFor={id} className="sr-only">
         חיפוש מוצרים
       </label>
@@ -31,14 +29,32 @@ function SearchField({ id, inputRef }: { id: string; inputRef?: Ref<HTMLInputEle
         enterKeyHint="search"
         autoComplete="off"
         placeholder="מה מחפשים?"
-        className="h-12 w-full rounded-full border border-ink-200 bg-ink-50 ps-12 pe-5 text-base text-ink-900 transition-[border-color,background-color,box-shadow] duration-200 placeholder:text-ink-500 hover:border-ink-300 focus:border-brand-400 focus:bg-white focus:shadow-[0_0_0_4px_var(--color-brand-100)] focus:outline-none"
+        className="h-12 w-full rounded-full border border-ink-200 bg-ink-50 ps-12 pe-5 text-base lg:h-14 lg:ps-14 lg:group-data-[collapsed=true]/header:h-12 text-ink-900 transition-[height,border-color,background-color,box-shadow] duration-200 placeholder:text-ink-500 hover:border-ink-300 focus:border-brand-400 focus:bg-white focus:shadow-[0_0_0_4px_var(--color-brand-100)] focus:outline-none"
       />
-      <Search aria-hidden="true" className="pointer-events-none absolute start-4 top-1/2 size-5 -translate-y-1/2 text-ink-500" />
+      <Search aria-hidden="true" className="pointer-events-none absolute start-4 top-1/2 size-5 -translate-y-1/2 text-ink-500 lg:start-5" />
     </form>
   );
 }
 
-export default function Header({ cartCount }: { cartCount: number }) {
+/**
+ * The logo leads to the top of the home page. Already on it: glide up to the header
+ * (and drop any #section from the address). Elsewhere: open the home page at its top.
+ */
+function goHome(e: MouseEvent<HTMLAnchorElement>) {
+  if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+  e.preventDefault();
+  if (window.location.pathname === '/' && !window.location.search) {
+    if (window.location.hash) history.replaceState(null, '', '/');
+    glideToTop();
+  } else {
+    navigate('/'); // a new page starts at the top
+  }
+}
+
+export default function Header() {
+  const cart = useCart();
+  const { business, catalog } = useContent();
+  const here = window.location.pathname;
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const mobileSearchRef = useRef<HTMLInputElement>(null);
@@ -90,32 +106,14 @@ export default function Header({ cartCount }: { cartCount: number }) {
   return (
     <header
       data-scrolled={isScrolled}
+      data-collapsed={collapsed}
       onPointerEnter={onPointerEnter}
       onPointerLeave={onPointerLeave}
       onFocus={onFocus}
       onBlur={onBlur}
-      className="fixed inset-x-0 top-0 z-50 border-b border-ink-100 bg-white/95 backdrop-blur-md transition-shadow duration-300 data-[scrolled=true]:shadow-[0_10px_30px_-18px_rgb(33_23_42/0.35)] supports-[backdrop-filter]:bg-white/85"
+      className="group/header fixed inset-x-0 top-0 z-50 border-b border-ink-100 bg-white/95 backdrop-blur-md transition-shadow duration-300 data-[scrolled=true]:shadow-[0_10px_30px_-18px_rgb(33_23_42/0.35)] supports-[backdrop-filter]:bg-white/85"
     >
-      {/* Utility bar — collapses on scroll */}
-      <div
-        inert={collapsed}
-        className={`overflow-hidden bg-ink-50 text-ink-600 transition-[height,opacity] duration-300 ease-out-expo ${
-          collapsed ? 'h-0 opacity-0' : 'h-9 opacity-100'
-        }`}
-      >
-        <div className="mx-auto flex h-9 max-w-[1600px] items-center justify-between gap-4 px-4 text-[0.8125rem] sm:px-6">
-          <a
-            href="tel:+97235551234"
-            className="flex items-center gap-1.5 font-semibold text-ink-900 transition-colors hover:text-brand-700"
-          >
-            <PhoneCall aria-hidden="true" className="size-3.5 text-brand-600" />
-            <span className="sr-only">טלפון:</span>
-            <span dir="ltr">03-5551234</span>
-          </a>
-        </div>
-      </div>
-
-      {/* Main row: search (start) · logo (centre) · wishlist + cart (end) */}
+      {/* Main row: search (start) · logo (centre) · cart (end) */}
       <div
         className={`mx-auto grid max-w-[1600px] grid-cols-[1fr_auto_1fr] items-center gap-3 px-4 transition-[height] duration-500 ease-out-expo sm:px-6 ${
           collapsed ? 'h-16 lg:h-[4.5rem]' : 'h-[5.5rem] md:h-36 lg:h-40'
@@ -137,7 +135,7 @@ export default function Header({ cartCount }: { cartCount: number }) {
           </button>
         </div>
 
-        <a href="#/" className="block rounded-full" aria-label="סיבה למסיבה – לדף הבית">
+        <a href="/" onClick={goHome} className="block rounded-full" aria-label={`${business.tradeName} – לדף הבית`}>
           <Logo
             eager
             alt=""
@@ -148,20 +146,28 @@ export default function Header({ cartCount }: { cartCount: number }) {
           />
         </a>
 
-        <div className="flex items-center justify-end gap-1 sm:gap-2">
-          <a href="#" className={iconButton} aria-label="רשימת המשאלות">
-            <Heart aria-hidden="true" className="size-6" />
-          </a>
-          <a href="#" className={iconButton} aria-label={`סל הקניות, ${cartCount} פריטים`}>
-            <ShoppingCart aria-hidden="true" className="size-6" />
-            <span
-              key={cartCount}
-              aria-hidden="true"
-              className="badge-bump absolute right-1 top-1 flex h-5 min-w-5 items-center justify-center rounded-full border-2 border-white bg-brand-600 px-1 text-xs font-bold leading-none text-white tabular-nums"
-            >
-              {cartCount}
+        <div className="flex items-center justify-end">
+          <button
+            type="button"
+            onClick={cart.open}
+            aria-haspopup="dialog"
+            aria-label={cart.count === 0 ? 'סל הקניות, ריק' : cart.count === 1 ? 'סל הקניות, פריט אחד' : `סל הקניות, ${cart.count} פריטים`}
+            className={`${control} w-12 gap-2.5 lg:h-14 lg:w-auto lg:ps-5 lg:pe-6 lg:group-data-[collapsed=true]/header:h-12`}
+          >
+            <CartIcon aria-hidden="true" className="size-6 shrink-0" />
+            <span aria-hidden="true" className="hidden font-semibold lg:inline">
+              סל הקניות
             </span>
-          </a>
+            {cart.count > 0 && (
+              <span
+                key={cart.count}
+                aria-hidden="true"
+                className="badge-bump absolute -end-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full border-2 border-white bg-brand-600 px-1 text-xs font-bold leading-none text-white tabular-nums lg:static lg:h-6 lg:min-w-6 lg:border-0 lg:px-1.5 lg:text-sm"
+              >
+                {cart.count}
+              </span>
+            )}
+          </button>
         </div>
       </div>
 
@@ -178,16 +184,21 @@ export default function Header({ cartCount }: { cartCount: number }) {
       <nav aria-label="קטגוריות" className="border-t border-ink-100">
         <div className="nav-fade scrollbar-hide mx-auto max-w-[1600px] overflow-x-auto px-2 sm:px-4">
           <ul className="flex h-12 w-max min-w-full items-center justify-start gap-0.5 lg:justify-center lg:gap-2">
-            {categories.map((name) => (
-              <li key={name}>
-                <a
-                  href="#"
-                  className="block whitespace-nowrap rounded-full px-3 py-1.5 text-sm font-medium text-ink-700 transition-colors duration-200 hover:bg-brand-50 hover:text-brand-700"
-                >
-                  {name}
-                </a>
-              </li>
-            ))}
+            {catalog.categories.map((c) => {
+              const href = categoryHref(c.id);
+              const current = here === href;
+              return (
+                <li key={c.id}>
+                  <a
+                    href={href}
+                    aria-current={current ? 'page' : undefined}
+                    className="block whitespace-nowrap rounded-full px-3 py-1.5 text-sm font-medium text-ink-700 transition-colors duration-200 hover:bg-brand-50 hover:text-brand-700 aria-[current=page]:bg-brand-50 aria-[current=page]:font-semibold aria-[current=page]:text-brand-700"
+                  >
+                    {c.name}
+                  </a>
+                </li>
+              );
+            })}
           </ul>
         </div>
       </nav>

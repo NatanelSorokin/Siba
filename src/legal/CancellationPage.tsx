@@ -1,10 +1,9 @@
 import { CheckCircle2, Send } from 'lucide-react';
 import { type FormEvent, useId, useRef, useState } from 'react';
-import { business } from './business';
+import { useBusiness } from '../content/store';
+import { telHref } from './business';
 import LegalLayout, { Clause } from './LegalLayout';
 import { Missing, req } from './Missing';
-
-const b = business;
 
 type Field = 'fullName' | 'phone' | 'email' | 'orderNumber' | 'reason';
 type Errors = Partial<Record<Field, string>>;
@@ -27,7 +26,7 @@ function validate(data: Record<Field, string>): Errors {
  * business with every detail filled in, so the request still reaches it.
  * Replace `submitCancellation` with an API call once a backend exists.
  */
-function submitCancellation(data: Record<Field, string>) {
+function submitCancellation(data: Record<Field, string>, to: string) {
   const body = [
     'הודעה על ביטול עסקה',
     '',
@@ -37,11 +36,12 @@ function submitCancellation(data: Record<Field, string>) {
     `מספר הזמנה: ${data.orderNumber}`,
     `סיבת הביטול: ${data.reason || '-'}`,
   ].join('\n');
-  const href = `mailto:${b.email}?subject=${encodeURIComponent(`ביטול עסקה - הזמנה ${data.orderNumber}`)}&body=${encodeURIComponent(body)}`;
+  const href = `mailto:${to}?subject=${encodeURIComponent(`ביטול עסקה - הזמנה ${data.orderNumber}`)}&body=${encodeURIComponent(body)}`;
   window.location.href = href;
 }
 
 function CancellationForm() {
+  const b = useBusiness();
   const uid = useId();
   const id = (f: Field) => `${uid}-${f}`;
   const [errors, setErrors] = useState<Errors>({});
@@ -62,7 +62,7 @@ function CancellationForm() {
       return;
     }
     if (!b.email) return; // business email not configured yet; the notice below explains
-    submitCancellation(data);
+    submitCancellation(data, b.email);
     setSent(true);
   };
 
@@ -74,7 +74,7 @@ function CancellationForm() {
           <p className="font-semibold">הודעת הביטול נפתחה בתוכנת הדוא"ל שלכם</p>
           <p className="mt-1">
             שלחו את ההודעה כדי להשלים את הביטול. אם תוכנת הדוא"ל לא נפתחה, אפשר לבטל גם בטלפון{' '}
-            <a href={`tel:${b.phoneHref}`} dir="ltr">
+            <a href={`tel:${telHref(b.phone)}`} dir="ltr">
               {b.phone}
             </a>
             .
@@ -138,7 +138,7 @@ function CancellationForm() {
       {/* Privacy notice at the point of collection (Privacy Protection Law §11) */}
       <p className="mt-5 text-sm leading-relaxed text-ink-600">
         הפרטים ישמשו רק לטיפול בבקשת הביטול ובהחזר הכספי, ויישמרו כנדרש לפי דין. אין חובה חוקית למסור אותם, אך בלעדיהם לא
-        נוכל לזהות את ההזמנה. אפשר לעיין בפרטים ולבקש לתקן אותם. פרטים נוספים ב<a href="#/privacy">מדיניות הפרטיות</a>.
+        נוכל לזהות את ההזמנה. אפשר לעיין בפרטים ולבקש לתקן אותם. פרטים נוספים ב<a href="/privacy">מדיניות הפרטיות</a>.
       </p>
 
       {!b.email && (
@@ -159,6 +159,7 @@ function CancellationForm() {
 }
 
 export default function CancellationPage() {
+  const b = useBusiness();
   return (
     <LegalLayout
       title="ביטול עסקה והחזרות"
@@ -221,7 +222,7 @@ export default function CancellationPage() {
           <li>בטופס המקוון שבעמוד זה.</li>
           <li>
             בטלפון{' '}
-            <a href={`tel:${b.phoneHref}`} dir="ltr">
+            <a href={`tel:${telHref(b.phone)}`} dir="ltr">
               {b.phone}
             </a>
             , בשעות הפעילות.

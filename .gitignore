@@ -9,3 +9,11 @@ coverage/
 
 # local tool cache
 .impeccable/hook.cache.json
+
+# Django backend
+backend/.venv/
+backend/db.sqlite3
+backend/media/
+backend/staticfiles/
+__pycache__/
+*.pyc

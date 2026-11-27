@@ -1,71 +1,13 @@
-import { Cake, Check, CheckCircle2, Flame, Package, ShoppingCart, Wine } from 'lucide-react';
+import { Cake, Check, CheckCircle2, Flame, Package, Wine } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { useContent } from '../content/store';
+import type { Tier } from '../content/types';
 import Confetti from './Confetti';
-
-type Tier = {
-  id: string;
-  name: string;
-  guests: string;
-  price: string;
-  oldPrice: string;
-  items: string[];
-  cta: string;
-  featured?: boolean;
-  tone: 'neutral' | 'brand' | 'ink';
-};
+import CartIcon from './CartIcon';
 
 const tabs = [
   { id: 'holiday', label: 'אירוח לחג', icon: Wine },
   { id: 'birthday', label: 'ימי הולדת', icon: Cake },
-];
-
-const tiers: Tier[] = [
-  {
-    id: 'basic',
-    name: 'חבילת בסיס',
-    guests: 'עד 12 חוגגים',
-    price: '149',
-    oldPrice: '195',
-    items: [
-      '12 צלחות + 12 כוסות מעוצבות לפי נושא',
-      '20 מפיות פרימיום + מפת שולחן עמידה',
-      'שרשרת דגלים יום הולדת שמח',
-      'מארז 15 בלוני לטקס צבעוניים תואמים',
-    ],
-    cta: 'הוסף חבילת בסיס לסל',
-    tone: 'neutral',
-  },
-  {
-    id: 'upgraded',
-    name: 'חבילה משודרגת',
-    guests: 'עד 24 חוגגים',
-    price: '249',
-    oldPrice: '340',
-    items: [
-      'כל מה שבחבילת הבסיס בכמות כפולה (24 איש)',
-      'מעמד קאפקייקס 3 קומות מעוצב',
-      'קשת בלונים אורגנית 2 מטר להרכבה עצמית',
-      'משאבת בלונים ידנית מהירה במתנה!',
-    ],
-    cta: 'הוסף חבילה משודרגת לסל',
-    featured: true,
-    tone: 'brand',
-  },
-  {
-    id: 'vip',
-    name: 'חבילת VIP דלוקס',
-    guests: 'עד 36 חוגגים',
-    price: '399',
-    oldPrice: '560',
-    items: [
-      'סט שלם ל-36 ילדים (שולחן מלא + כובעים)',
-      'קשת בלונים ענקית 4 מטר + דמויות פויל ענקיות',
-      'פיניאטה מעוצבת ענקית + מקל וקונפטי מילוי',
-      'בלון מספר ענק 86 ס"מ בהתאמה אישית',
-    ],
-    cta: 'הוסף חבילת VIP לסל',
-    tone: 'ink',
-  },
 ];
 
 const toneStyles = {
@@ -92,7 +34,8 @@ const toneStyles = {
   },
 } as const;
 
-export default function PartyInABox({ onAddToCart }: { onAddToCart: (name: string) => void }) {
+export default function PartyInABox({ onAddToCart }: { onAddToCart: (tier: Tier) => void }) {
+  const { packages } = useContent();
   const [activeTheme, setActiveTheme] = useState('holiday');
   const [justAdded, setJustAdded] = useState<string | null>(null);
   const timer = useRef<number | undefined>(undefined);
@@ -100,8 +43,8 @@ export default function PartyInABox({ onAddToCart }: { onAddToCart: (name: strin
   useEffect(() => () => window.clearTimeout(timer.current), []);
 
   const handleAdd = (tier: Tier) => {
-    onAddToCart(tier.name);
-    setJustAdded(tier.id);
+    onAddToCart(tier);
+    setJustAdded(tier.id || tier.name);
     window.clearTimeout(timer.current);
     timer.current = window.setTimeout(() => setJustAdded(null), 1800);
   };
@@ -115,15 +58,17 @@ export default function PartyInABox({ onAddToCart }: { onAddToCart: (name: strin
           <div className="max-w-2xl">
             <div className="flex flex-wrap items-center gap-x-4 gap-y-3">
               <h2 id="packages-title" className="font-display text-3xl font-bold text-ink-900 md:text-4xl">
-                חבילות מורכבות בהתאם לצורך שלכם!
+                {packages.title}
               </h2>
+              {packages.badge && (
               <span className="inline-flex items-center gap-1.5 rounded-full bg-sun-400 px-3 py-1 text-sm font-bold text-ink-900">
                 <Package aria-hidden="true" className="size-4" />
-                חדש בסיבה למסיבה
+                {packages.badge}
               </span>
+              )}
             </div>
             <p className="mt-3 text-lg leading-relaxed text-ink-600">
-              בוחרים את הנושא והגודל - ומקבלים ערכה מלאה כולל כלי שולחן, קישוטי קיר ובלונים תואמים בחיסכון של עד 28%!
+              {packages.text}
             </p>
           </div>
 
@@ -150,12 +95,12 @@ export default function PartyInABox({ onAddToCart }: { onAddToCart: (name: strin
 
         {/* Pricing tiers */}
         <ul className="grid grid-cols-1 items-stretch gap-6 md:grid-cols-3 md:gap-5 lg:gap-6">
-          {tiers.map((tier) => {
-            const s = toneStyles[tier.tone];
-            const added = justAdded === tier.id;
+          {packages.tiers.map((tier, idx) => {
+            const s = toneStyles[tier.tone] ?? toneStyles.neutral;
+            const added = justAdded === (tier.id || tier.name);
             return (
               <li
-                key={tier.id}
+                key={tier.id || idx}
                 className={`relative flex flex-col rounded-3xl bg-white p-6 lg:p-7 ${
                   tier.featured
                     ? 'mt-3 shadow-[0_24px_50px_-24px_rgb(216_27_106/0.45)] ring-2 ring-brand-600 md:mt-0 md:-translate-y-3'
@@ -165,7 +110,7 @@ export default function PartyInABox({ onAddToCart }: { onAddToCart: (name: strin
                 {tier.featured && (
                   <span className="absolute -top-3.5 left-1/2 inline-flex -translate-x-1/2 items-center gap-1 whitespace-nowrap rounded-full bg-brand-600 px-4 py-1 text-xs font-bold text-white shadow-sm">
                     <Flame aria-hidden="true" className="size-3.5 text-sun-300" />
-                    הבחירה המומלצת ביותר
+                    {packages.featuredLabel}
                   </span>
                 )}
 
@@ -178,14 +123,16 @@ export default function PartyInABox({ onAddToCart }: { onAddToCart: (name: strin
                   <span className={`font-display text-5xl font-bold leading-none tabular-nums ${s.price}`}>
                     <span className="sr-only">מחיר: </span>₪{tier.price}
                   </span>
-                  <s className="text-base text-ink-500 tabular-nums">
-                    <span className="sr-only">במקום </span>₪{tier.oldPrice}
-                  </s>
+                  {tier.oldPrice && (
+                    <s className="text-base text-ink-500 tabular-nums">
+                      <span className="sr-only">במקום </span>₪{tier.oldPrice}
+                    </s>
+                  )}
                 </p>
 
                 <ul className="flex flex-1 flex-col gap-3 text-[0.9375rem] leading-snug text-ink-700">
-                  {tier.items.map((item) => (
-                    <li key={item} className="flex items-start gap-2.5">
+                  {tier.items.map((item, i) => (
+                    <li key={i} className="flex items-start gap-2.5">
                       <CheckCircle2 aria-hidden="true" className={`mt-px size-5 shrink-0 ${s.check}`} />
                       <span>{item}</span>
                     </li>
@@ -207,7 +154,7 @@ export default function PartyInABox({ onAddToCart }: { onAddToCart: (name: strin
                       </>
                     ) : (
                       <>
-                        <ShoppingCart aria-hidden="true" className="size-5" />
+                        <CartIcon aria-hidden="true" className="size-5" />
                         {tier.cta}
                       </>
                     )}
@@ -221,7 +168,7 @@ export default function PartyInABox({ onAddToCart }: { onAddToCart: (name: strin
         {/* Price disclosure (Consumer Protection Law: total price incl. VAT; real pre-sale price) */}
         <p className="mt-8 text-center text-sm text-ink-600">
           המחירים כוללים מע"מ. המחיר המחוק הוא מחיר החבילה לפני ההנחה. עלויות המשלוח מפורטות ב
-          <a href="#/shipping" className="font-medium text-brand-700 underline underline-offset-4">
+          <a href="/shipping" className="font-medium text-brand-700 underline underline-offset-4">
             מדיניות המשלוחים
           </a>
           .

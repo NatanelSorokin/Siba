@@ -1,0 +1,230 @@
+{
+  "version": 1,
+  "business": {
+    "tradeName": "סיבה למסיבה",
+    "legalName": "סיבה למסיבה בע\"מ",
+    "companyId": "",
+    "address": "",
+    "phone": "03-5551234",
+    "email": "",
+    "instagram": "",
+    "domain": "siba-lmesiba.co.il",
+    "hours": [
+      {
+        "days": "ימים א'-ה'",
+        "time": "08:30 - 20:00"
+      },
+      {
+        "days": "יום ו' וערבי חג",
+        "time": "08:30 - 14:00"
+      },
+      {
+        "days": "מוקד וואטסאפ",
+        "time": "מענה תוך שעתיים"
+      }
+    ],
+    "paymentMethods": [
+      "כרטיס אשראי",
+      "ביט",
+      "Apple Pay"
+    ],
+    "accessibilityCoordinator": {
+      "name": "",
+      "phone": "",
+      "email": ""
+    },
+    "storeAccessibility": "",
+    "shipping": {
+      "areas": "",
+      "deliveryTime": "",
+      "cost": "",
+      "pickup": ""
+    },
+    "updated": {
+      "accessibility": "2026-11-24",
+      "terms": "2026-11-24",
+      "privacy": "2026-11-24",
+      "cancellation": "2026-11-24",
+      "shipping": "2026-11-24"
+    }
+  },
+  "catalog": {
+    "categories": [
+      {
+        "id": "balloons",
+        "name": "בלונים",
+        "description": ""
+      },
+      {
+        "id": "theme-parties",
+        "name": "יום הולדת לפי נושא",
+        "description": ""
+      },
+      {
+        "id": "party-supplies",
+        "name": "מוצרי מסיבה",
+        "description": ""
+      },
+      {
+        "id": "baking-tools",
+        "name": "אביזרי אפייה",
+        "description": ""
+      },
+      {
+        "id": "baking-ingredients",
+        "name": "חומרי גלם לאפייה",
+        "description": ""
+      },
+      {
+        "id": "cake-decorations",
+        "name": "קישוטים לעוגה",
+        "description": ""
+      },
+      {
+        "id": "disposables",
+        "name": "כלים חד פעמיים",
+        "description": ""
+      },
+      {
+        "id": "consumables",
+        "name": "כלים מתכלים",
+        "description": ""
+      },
+      {
+        "id": "sweets",
+        "name": "ממתקים",
+        "description": ""
+      }
+    ],
+    "products": []
+  },
+  "hero": {
+    "eyebrow": "K-POP DEMON HUNTERS",
+    "title": "חוגגים יום הולדת בקצב מטורף!",
+    "text": "הלהיט שכבש את הילדים עכשיו במגוון ענק של צלחות, כוסות ממותגות, מפיות, קישוטי קיר ובלוני פרימיום.",
+    "primary": {
+      "label": "לרכישה",
+      "href": "#"
+    },
+    "secondary": {
+      "label": "לכל הקולקציות",
+      "href": "#themes"
+    },
+    "note": "קולקציה בלעדית במהדורה מיוחדת",
+    "sticker": {
+      "show": true,
+      "badge": "חדש!",
+      "text": "ערכת מסיבה מושלמת ל-16 חוגגים",
+      "price": "139.90",
+      "suffix": "בלבד"
+    }
+  },
+  "categories": {
+    "items": [
+      {
+        "title": "מוצרי מסיבה",
+        "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuBGt7V1V7lW7z0_w-085Dcv4-x17K6E9aX7b_oXf2c8rC-P6D2jW4mJm2R9_O1D5s5Z9nQ",
+        "href": "/category/party-supplies"
+      },
+      {
+        "title": "קולקציית בוב ספוג",
+        "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuAnqB1mHk4n_7n2o4_xX1L8m1V7z6Q9-tW_oP_yX9a1B5z4C8v3D2k1J5m7N9Q",
+        "href": "#"
+      },
+      {
+        "title": "ממתקים",
+        "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuBbDV_OfR8Le1Bok_7Nho5uffCYUcbZ6kOe2tqL-KQ6Hz8s-7NgYEH9xFDYfCPB9i_klNaUZw-DwGoekpAUyeIXhApoV15dhfFLBeZ_326rwJ-W6ZCT85saeJdcVswPv0Taj5kY1Yps7LHbJe0Gkw9V3KjYTiQzYfnRtKGDfiQTDiaipQOE-2pwwbZIA-pBxSvaDDWBD-sqhm65rQH4WJSzSasyOq3VeDcqeeTk4xpGUNH7zNLoVRY-9Q",
+        "href": "/category/sweets"
+      }
+    ]
+  },
+  "themes": {
+    "title": "מסיבות לפי נושא",
+    "subtitle": "האירוע המושלם שלכם עם המוצרים המשמחים שלנו",
+    "allLink": {
+      "label": "לכל המוצרים",
+      "href": "#"
+    },
+    "items": [
+      {
+        "title": "עולם החד קרן הקסום",
+        "subtitle": "בלוני ענק, קשתות אורגניות וכלים תואמים",
+        "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuARgzA_QENQtyWq9EYne0MNtWWMRyTYKHQTk6fDygtHB96onQZv2-Ef2ZHItwpKqTL8bTG1BBT_FRnHyT6Jfrf52sGQKkPWSH1p7WtTOyAk4cfj37ocWMsIeoKVnYXj0akiJLZrUTWnkHAfBSmVF2J5kGxmG3YCgfvo4Wg6rZhiLSJnr9dZPDeRd7v0XuekjJF-PvKRYtjnVAssAyd-xEAQ7OAJ1Fme_B5k7bMXkR3OoqL9dX7WkqZMsg",
+        "href": "#"
+      },
+      {
+        "title": "חגיגה פסטלית - יום הולדת שמח",
+        "subtitle": "מניפות נייר, דגלונים ועוגות מעוצבות",
+        "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuAnVhyGH-WchAZlN08NNP7qPXPv1ScKTMLpYkQxxImAy98-OuNQi9PxSx56_umqwqvNFgl0714hdi00FOvP-_IoILXZLLGtNDUskXvkRYPxgH7n-t6JzO8L5df_gI98Giv1frxy5O6rmDZdyB1vfP-p4MNY-tJzok7izBCwX2Yfkv4a5kAzLG_MW_xO_G_QbfqKoQNuQ_BhxqK-uWCOYRetAePp3iwjrUfnAEkc8iiSdDyHZIUzheH1Lw",
+        "href": "#"
+      }
+    ]
+  },
+  "packages": {
+    "title": "חבילות מורכבות בהתאם לצורך שלכם!",
+    "badge": "חדש בסיבה למסיבה",
+    "text": "בוחרים את הנושא והגודל - ומקבלים ערכה מלאה כולל כלי שולחן, קישוטי קיר ובלונים תואמים בחיסכון של עד 28%!",
+    "featuredLabel": "הבחירה המומלצת ביותר",
+    "tiers": [
+      {
+        "id": "basic",
+        "name": "חבילת בסיס",
+        "guests": "עד 12 חוגגים",
+        "price": "149",
+        "oldPrice": "195",
+        "items": [
+          "12 צלחות + 12 כוסות מעוצבות לפי נושא",
+          "20 מפיות פרימיום + מפת שולחן עמידה",
+          "שרשרת דגלים יום הולדת שמח",
+          "מארז 15 בלוני לטקס צבעוניים תואמים"
+        ],
+        "cta": "הוסף חבילת בסיס לסל",
+        "featured": false,
+        "tone": "neutral"
+      },
+      {
+        "id": "upgraded",
+        "name": "חבילה משודרגת",
+        "guests": "עד 24 חוגגים",
+        "price": "249",
+        "oldPrice": "340",
+        "items": [
+          "כל מה שבחבילת הבסיס בכמות כפולה (24 איש)",
+          "מעמד קאפקייקס 3 קומות מעוצב",
+          "קשת בלונים אורגנית 2 מטר להרכבה עצמית",
+          "משאבת בלונים ידנית מהירה במתנה!"
+        ],
+        "cta": "הוסף חבילה משודרגת לסל",
+        "featured": true,
+        "tone": "brand"
+      },
+      {
+        "id": "vip",
+        "name": "חבילת VIP דלוקס",
+        "guests": "עד 36 חוגגים",
+        "price": "399",
+        "oldPrice": "560",
+        "items": [
+          "סט שלם ל-36 ילדים (שולחן מלא + כובעים)",
+          "קשת בלונים ענקית 4 מטר + דמויות פויל ענקיות",
+          "פיניאטה מעוצבת ענקית + מקל וקונפטי מילוי",
+          "בלון מספר ענק 86 ס\"מ בהתאמה אישית"
+        ],
+        "cta": "הוסף חבילת VIP לסל",
+        "featured": false,
+        "tone": "ink"
+      }
+    ]
+  },
+  "footer": {
+    "tagline": "החגיגה מתחילה כאן",
+    "description": "היעד המוביל בישראל לציוד ימי הולדת, בלוני הליום מעוצבים, מסיבות נושא ופתרונות אירוח מתקדמים. שירות אדיב, איכות ללא פשרות ומשלוח מהיר עד דלת הבית.",
+    "secureLabel": "קנייה מאובטחת"
+  },
+  "checkout": {
+    "deliveryEnabled": false,
+    "deliveryFee": "",
+    "pickupEnabled": true,
+    "maxPayments": 1
+  }
+}

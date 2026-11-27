@@ -1,16 +1,15 @@
-import { business } from './business';
+import { useBusiness } from '../content/store';
+import { telHref } from './business';
 import LegalLayout, { Clause } from './LegalLayout';
 import { req } from './Missing';
 
-const b = business;
-const coordinator = b.accessibilityCoordinator;
-
 function ContactList() {
+  const b = useBusiness();
   return (
     <dl>
       <dt>טלפון</dt>
       <dd>
-        <a href={`tel:${b.phoneHref}`} dir="ltr">
+        <a href={`tel:${telHref(b.phone)}`} dir="ltr">
           {b.phone}
         </a>
       </dd>
@@ -27,6 +26,8 @@ function ContactList() {
 /* ------------------------------------------------------------------ */
 
 export function AccessibilityStatement() {
+  const b = useBusiness();
+  const coordinator = b.accessibilityCoordinator;
   return (
     <LegalLayout
       title="הצהרת נגישות"
@@ -90,7 +91,7 @@ export function AccessibilityStatement() {
           <dt>טלפון</dt>
           <dd>
             {coordinator.phone ? (
-              <a href={`tel:${coordinator.phone}`} dir="ltr">
+              <a href={`tel:${telHref(coordinator.phone)}`} dir="ltr">
                 {coordinator.phone}
               </a>
             ) : (
@@ -112,6 +113,7 @@ export function AccessibilityStatement() {
 /* ------------------------------------------------------------------ */
 
 export function Terms() {
+  const b = useBusiness();
   return (
     <LegalLayout
       title="תקנון האתר ותנאי רכישה"
@@ -128,7 +130,7 @@ export function Terms() {
           <dd>{req(b.address, 'כתובת העסק')}</dd>
           <dt>טלפון</dt>
           <dd>
-            <a href={`tel:${b.phoneHref}`} dir="ltr">
+            <a href={`tel:${telHref(b.phone)}`} dir="ltr">
               {b.phone}
             </a>
           </dd>
@@ -141,7 +143,7 @@ export function Terms() {
         <ul>
           <li>כל המחירים באתר הם בשקלים חדשים וכוללים מע"מ.</li>
           <li>
-            עלות המשלוח, אם יש, אינה כלולה במחיר המוצר. היא מפורטת ב<a href="#/shipping">מדיניות המשלוחים</a> ומוצגת לפני
+            עלות המשלוח, אם יש, אינה כלולה במחיר המוצר. היא מפורטת ב<a href="/shipping">מדיניות המשלוחים</a> ומוצגת לפני
             השלמת ההזמנה.
           </li>
           <li>כאשר מוצג מחיר מחוק לצד מחיר מבצע, המחיר המחוק הוא המחיר שבו נמכר המוצר לפני המבצע.</li>
@@ -151,6 +153,10 @@ export function Terms() {
       <Clause title="הזמנה ותשלום">
         <ul>
           <li>אפשר לשלם באמצעים הבאים: {b.paymentMethods.join(', ')}.</li>
+          <li>
+            התשלום באתר מתבצע בעמוד המאובטח של חברת הסליקה Cardcom. ההזמנה נקלטת רק לאחר שחברת הסליקה אישרה את התשלום, והמחיר
+            שנגבה הוא המחיר המוצג באתר בעת ההזמנה.
+          </li>
           <li>אישור ההזמנה ומסמך המפרט את פרטי העסקה וזכות הביטול יישלחו אליכם לאחר ההזמנה.</li>
           <li>אם מוצר שהוזמן אזל מהמלאי, נעדכן אתכם ונציע מוצר חלופי או החזר מלא של הסכום ששולם.</li>
         </ul>
@@ -158,14 +164,14 @@ export function Terms() {
 
       <Clause title="משלוחים">
         <p>
-          אזורי המשלוח, זמני האספקה והעלויות מפורטים ב<a href="#/shipping">מדיניות המשלוחים</a>.
+          אזורי המשלוח, זמני האספקה והעלויות מפורטים ב<a href="/shipping">מדיניות המשלוחים</a>.
         </p>
       </Clause>
 
       <Clause title="ביטול עסקה והחזרות">
         <p>
           אפשר לבטל עסקה בהתאם לחוק הגנת הצרכן, התשמ"א-1981. כל הפרטים, כולל טופס ביטול מקוון, נמצאים בעמוד{' '}
-          <a href="#/cancel">ביטול עסקה והחזרות</a>.
+          <a href="/cancel">ביטול עסקה והחזרות</a>.
         </p>
       </Clause>
 
@@ -192,7 +198,7 @@ export function Terms() {
 
       <Clause title="פרטיות">
         <p>
-          השימוש במידע אישי שנמסר באתר מתואר ב<a href="#/privacy">מדיניות הפרטיות</a>.
+          השימוש במידע אישי שנמסר באתר מתואר ב<a href="/privacy">מדיניות הפרטיות</a>.
         </p>
       </Clause>
 
@@ -212,6 +218,7 @@ export function Terms() {
 /* ------------------------------------------------------------------ */
 
 export function PrivacyPolicy() {
+  const b = useBusiness();
   return (
     <LegalLayout
       title="מדיניות פרטיות ואבטחת מידע"
@@ -240,7 +247,9 @@ export function PrivacyPolicy() {
             או שולחים טופס ביטול עסקה.
           </li>
           <li>
-            <strong>פרטי תשלום:</strong> מועברים ישירות לחברת הסליקה ואינם נשמרים אצלנו.
+            <strong>פרטי תשלום:</strong> פרטי הכרטיס מוקלדים רק בעמוד התשלום המאובטח של חברת הסליקה Cardcom, ואינם עוברים
+            דרך האתר ואינם נשמרים אצלנו. אנחנו מקבלים ממנה רק אישור על התשלום, את מספר העסקה ואת 4 הספרות האחרונות של
+            הכרטיס.
           </li>
           <li>
             <strong>מידע טכני:</strong> שרתי האחסון רושמים מידע טכני בסיסי, כמו כתובת IP וסוג הדפדפן, לצורך תפעול ואבטחת
@@ -266,14 +275,19 @@ export function PrivacyPolicy() {
 
       <Clause title="למי המידע מועבר">
         <p>
-          אנחנו לא מוכרים מידע אישי. נעביר מידע רק במידה הנדרשת: לחברת המשלוחים, לחברת הסליקה, לספקי שירות שמפעילים עבורנו
-          את האתר, וכאשר הדבר נדרש לפי דין.
+          אנחנו לא מוכרים מידע אישי. נעביר מידע רק במידה הנדרשת: לחברת המשלוחים, לחברת הסליקה (Cardcom מקבלת את סכום
+          ההזמנה, השם, הטלפון והדוא"ל, לצורך ביצוע התשלום), לספקי שירות שמפעילים עבורנו את האתר, וכאשר הדבר נדרש לפי דין.
         </p>
       </Clause>
 
       <Clause title="עוגיות ואחסון בדפדפן">
         <ul>
-          <li>האתר אינו משתמש בעוגיות פרסום או בכלי מעקב.</li>
+          <li>האתר אינו משתמש בעוגיות פרסום או בכלי מעקב, וגולשים באתר אינם מקבלים עוגיות כלל.</li>
+          <li>עוגיות חיוניות לאבטחה נשמרות רק אצל מנהלי האתר, בזמן שהם מחוברים לממשק הניהול.</li>
+          <li>
+            תוכן סל הקניות נשמר באחסון המקומי של הדפדפן בלבד, ואינו נשלח אלינו עד שתבחרו להזמין. הפרטים שממלאים בטופס ההזמנה
+            אינם נשמרים בדפדפן.
+          </li>
           <li>
             הגדרות תפריט הנגישות שבחרתם נשמרות באחסון המקומי של הדפדפן בלבד, כדי שיישארו בביקור הבא. הן אינן נשלחות אלינו.
           </li>
@@ -292,7 +306,7 @@ export function PrivacyPolicy() {
       <Clause title="אבטחת מידע ושמירתו">
         <p>
           אנחנו נוקטים אמצעים סבירים ומקובלים לאבטחת המידע, ושומרים אותו רק כל עוד הוא נדרש למטרות שלשמן נאסף או כנדרש
-          לפי דין.
+          לפי דין. הזמנות שלא שולמו נמחקות אוטומטית לאחר 30 יום.
         </p>
       </Clause>
 
@@ -311,6 +325,7 @@ export function PrivacyPolicy() {
 /* ------------------------------------------------------------------ */
 
 export function ShippingPolicy() {
+  const b = useBusiness();
   const s = b.shipping;
   return (
     <LegalLayout title="זמני אספקה ומדיניות משלוחים" updated={b.updated.shipping}>
@@ -333,7 +348,7 @@ export function ShippingPolicy() {
       <Clause title="איחור באספקה">
         <p>
           אם המשלוח לא סופק במועד שהתחייבנו אליו, תוכלו לבטל את העסקה ללא דמי ביטול. פרטים בעמוד{' '}
-          <a href="#/cancel">ביטול עסקה והחזרות</a>.
+          <a href="/cancel">ביטול עסקה והחזרות</a>.
         </p>
       </Clause>
     </LegalLayout>

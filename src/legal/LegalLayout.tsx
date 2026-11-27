@@ -14,7 +14,7 @@ export default function LegalLayout({ title, updated, intro, children }: LegalLa
   return (
     <article className="mx-auto w-full max-w-3xl px-4 pt-10 sm:px-6 md:pt-14">
       <a
-        href="#/"
+        href="/"
         className="mb-8 inline-flex items-center gap-1.5 rounded-full text-sm font-semibold text-brand-700 transition-colors hover:text-brand-800"
       >
         <ArrowRight aria-hidden="true" className="size-4" />

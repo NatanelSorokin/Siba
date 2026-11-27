@@ -28,7 +28,7 @@ export default function SmartImage({ src, alt, className = '', eager = false, wi
     if (img && img.complete && img.naturalWidth === 0) setFailed(true);
   }, [src]);
 
-  if (failed) {
+  if (failed || !src) {
     return (
       <div
         role={alt ? 'img' : undefined}

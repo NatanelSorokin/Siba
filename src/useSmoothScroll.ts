@@ -15,6 +15,15 @@ export function jumpTo(target: number | HTMLElement = 0) {
   else target.scrollIntoView();
 }
 
+/** Glide smoothly to the top (instantly when the visitor asked for reduced motion). */
+export function glideToTop() {
+  if (active) active.scrollTo(0);
+  else {
+    const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches || document.documentElement.classList.contains('a11y-no-motion');
+    window.scrollTo({ top: 0, behavior: still ? 'auto' : 'smooth' });
+  }
+}
+
 /**
  * Inertial wheel scrolling (Lenis). Touch keeps native scrolling.
  * Turns itself off while the OS asks for reduced motion or the
@@ -58,8 +67,7 @@ export default function useSmoothScroll() {
       e.preventDefault();
       if (lenis) lenis.scrollTo(target, { offset: ANCHOR_OFFSET });
       else target.scrollIntoView({ behavior: shouldRun() ? 'smooth' : 'auto' });
-      // keep the page's own route (#/terms etc.) in the address bar
-      if (!window.location.hash.startsWith('#/')) history.pushState(null, '', hash);
+      history.pushState(null, '', hash);
       if (!target.hasAttribute('tabindex') && !target.matches('a, button, input, select, textarea')) {
         target.setAttribute('tabindex', '-1');
       }
